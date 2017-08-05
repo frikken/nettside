@@ -91,7 +91,7 @@ function pageContent (state, emit) {
 
 function footer (state, emit) {
   return html`
-      <footer class="mw8 bg-gold w-100 pv4">
+      <footer class="bg-gold w-100 pv4">
         ${toHtml(md(footerMarkdown))}
       </footer>
     `
