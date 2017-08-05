@@ -1,6 +1,7 @@
 var app = require('choo')()
 var html = require('choo/html')
 var persist = require('choo-persist')
+var expose = require('choo-devtools')
 var md = require('marked')
 var css = require('sheetify')
 var fs = require('fs')
@@ -12,12 +13,14 @@ var footerMarkdown = fs.readFileSync(__dirname + '/assets/footer.md', 'utf-8')
 app.use(persist())
 app.use(markdownPages(pagesFolder))
 app.route('/:page', mainView)
-app.mount('body')
 
 if (process.env.NODE_ENV !== 'production') {
-  app.use(require('choo-log')())
-  document.body.classList.add('debug-grid-16')
+  // app.use(require('choo-log')())
+  app.use(expose())
+  window.document.body.classList.add('debug-grid-16')
 }
+
+app.mount('body')
 
 css('tachyons')
 css`
@@ -34,7 +37,7 @@ css`
 
 function mainView (state, emit) {
   return html`
-    <body class='flex flex-column justify-between items-center h-100 bg-washed-yellow black sans-serif'>
+    <body class='flex flex-column justify-between items-center h-100 debug-grid-16 black avenir'>
       ${header(state, emit)}
       ${pageContent(state, emit)}
       ${footer(state, emit)}
@@ -80,7 +83,7 @@ function pageContent (state, emit) {
   var pagekey = '/' + state.params.page
   if (!state.pages[pagekey]) return null
   return html`
-    <main class="w-100 pb3 f3-ns flex flex-column" id="content">
+    <main class="w-100 pb5 f3-ns flex flex-column" id="content">
       ${toHtml(md(state.pages[pagekey].markdown))}
     </main>
   `
@@ -88,7 +91,7 @@ function pageContent (state, emit) {
 
 function footer (state, emit) {
   return html`
-      <footer class="mw8 w-100 pv4">
+      <footer class="mw8 bg-gold w-100 pv4">
         ${toHtml(md(footerMarkdown))}
       </footer>
     `
@@ -105,11 +108,11 @@ function toHtml (src) {
 function formatMarkdown (el, i) {
   if (el.classList !== undefined) {
     var nodeName = el.nodeName.toLowerCase()
-    if (nodeName === 'h1' && i === 0) el.classList.value = 'f-5-ns tc'
-    if (nodeName === 'p' && i === 1) el.classList.value = 'f-4'
-    if (nodeName === 'h2') el.classList.value = 'f1'
+    if (nodeName === 'h1' && i === 0) el.classList.value = 'f-5-ns tc lh-solid'
+    if (nodeName === 'p' && i === 1) el.classList.value = 'f-4 lh-copy'
+    if (nodeName === 'h2') el.classList.value = 'f1 lh-title'
     if (nodeName === 'pre') el.classList.value = 'f3 bg-dark-gray mw9 pa4 tl overflow-y-auto'
-    if (nodeName === 'ul') el.classList.value = 'f2 list b lh-copy'
+    if (nodeName === 'ul') el.classList.value = 'list b lh-copy'
     if (nodeName === 'table') el.classList.value = 'w-100'
     el.classList.add('ph4-ns', 'ph5-l', 'ph2', 'mw8', 'w-100')
   }
@@ -137,7 +140,7 @@ function markdownPages (pagesFolder) {
       // Populate state with new pages and update markdown markdown
       Object.keys(pages).forEach(function (path) {
         if (!state.pages[path]) state.pages[path] = pages[path]
-        fetch('/assets/pages/' + pages[path].file).then(function (data) { return data.text() }).then(function (markdown) {
+        window.fetch('/assets/pages/' + pages[path].file).then(function (data) { return data.text() }).then(function (markdown) {
           state.pages[path].markdown = markdown
           emitter.emit('log:info', 'got markdown', markdown)
           if (path.slice(1) === state.params.page) emitter.emit('render')
