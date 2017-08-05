@@ -12,7 +12,7 @@ Vi har spesielt kompetanse på:
 
 
 ## Hogstvedtveien 23 – Vårt pilotprosjekt
-
+![/assets/hogstvedtveien.jpg]
 Huset ble ferdig desember 2007, og huseier gjennomfører selv arbeidene med utearealene.
 Huset er prosjektert og oppført som enebolig med en utleieenhet i Ås kommune i Follo. Det er bygget som lavenergibolig med pelletsovn og solfanger.
 
