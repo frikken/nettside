@@ -51,7 +51,7 @@ function header (state, emit) {
           onclick=${function () { emit('pushState', '/') }}
           src="data:image/svg+xml;base64,${btoa(String.fromCharCode.apply(null, new Uint8Array(logo)))}"
         />
-        <span class="clip">Tomter Vel</span>
+        <span class="clip">Klingenberg Bygg</span>
       </h1>
       <nav class="f3-l pt2 pt0-ns flex flex-column justify-center">
         ${menuElement(state, emit)}
